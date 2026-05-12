@@ -1,0 +1,4 @@
+[submodule "components/pnet-dev"]
+	path = components/pnet-dev
+	url = https://github.com/Karego-At/profinet.git
+	branch = sensor_dev
