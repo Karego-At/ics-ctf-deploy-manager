@@ -1,0 +1,6 @@
+components
+venv
+.git*
+docker*
+.docker*
+*/__pycache__/*
