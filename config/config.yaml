@@ -1,0 +1,7 @@
+
+
+devices:
+  - name: plc1
+    type: PLC
+    nw: "192.168.1.10/24"
+    nic: "wlp1s0"
