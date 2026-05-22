@@ -20,6 +20,9 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./ /ws
 
+RUN chmod +x ./ws/ssh-setup.sh
+ENTRYPOINT ["./ws/ssh-setup.sh"]
+
 # Опциональные Profinet-инструменты
 # RUN pip3 install profinet  # или другие библиотеки по задаче
 
