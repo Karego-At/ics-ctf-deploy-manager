@@ -4,4 +4,35 @@ devices:
   - name: plc1
     type: PLC
     nw: "192.168.101.0/24"
-    nic: "enx00e04c024b80"
+    nic: "wlp1s0" #"enx00e04c024b80"
+
+
+
+components:
+  - name: hw-pnet-dev
+    type: simple
+    path: ${components_path}/pnet-dev
+
+  - name: attacker-ssh
+    type: connectable        
+    path: ${components_path}/attacker-ssh
+    port: 22
+
+
+
+
+
+setups:
+  - name:
+    network:
+      name:
+      type: "macvlan"
+      # options
+      # ipam: {} 
+    devices: [plc1]
+    peers:
+      - name:
+        component:  hw-pnet-dev
+        connection_options: {}
+        run_options: {}
+      - component: attacker-ssh
