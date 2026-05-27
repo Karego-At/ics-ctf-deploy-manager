@@ -1,0 +1,24 @@
+setups:
+  - name:
+    network:
+      name:
+      driver: "macvlan"
+      options: {"parent": wlp1s0}
+      
+      # ipam: {} 
+    devices: [plc1]
+    peers:
+      - name:
+        component:  hw-pnet-dev
+        connection_options: {}
+        run_options: {}
+        settings: 
+          mtu: 1200
+      # - component: attacker-ssh
+      #   args: 
+      #     host_port: 2020
+      # - component: attacker-ssh
+      #   args:
+      #     host_port: 4040
+      # - component: hw-pnet-dev
+      # # - component: non-existing
