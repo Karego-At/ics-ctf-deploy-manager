@@ -28,6 +28,11 @@ class Manager:
         self.networks:list[BaseNetwork] = []
 
 
+    def setup(self, setups:list[SetupConfig]):
+        for setup in setups:
+            self.create_setup(setup)
+
+
     def create_setup(self, config: SetupConfig):
 
         try:

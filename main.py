@@ -23,8 +23,7 @@ def main():
     print(conf.setups[0].network.to_kwargs())
     # print(conf)
 
-    for s in conf.setups:
-        manager.create_setup(config=s)
+    manager.setup(conf.setups)
 
     manager.start()
 

@@ -79,7 +79,7 @@ class PeerConfig(BaseModel):
 
 
 class SetupConfig(BaseModel):
-    name: str | None = None
+    # name: str | None = None
     network: NetworkConfig | None = None
     devices: list[str] = Field(default_factory=list)  
     peers: list[PeerConfig] = Field(default_factory=list)
