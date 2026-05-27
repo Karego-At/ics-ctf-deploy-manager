@@ -26,8 +26,9 @@ setups:
   - name:
     network:
       name:
-      type: "macvlan"
-      # options
+      driver: "macvlan"
+      options: {"parent": wlp1s0}
+      
       # ipam: {} 
     devices: [plc1]
     peers:
@@ -35,4 +36,6 @@ setups:
         component:  hw-pnet-dev
         connection_options: {}
         run_options: {}
+        settings: 
+          mtu: 1200
       - component: attacker-ssh

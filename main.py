@@ -1,11 +1,11 @@
 from src.test import run_pn_dev
 import os
-from src.config import get_config
+from src.config.loader import get_config
 from src.model.components import Component
 from ipaddress import IPv4Address
 import sys
 
-from src.config import ComponentConfig, ConnectionOptions, RunOptions
+# from config.loader import ComponentConfig, ConnectionOptions, RunOptions
 from src.model.manager import Manager
 
 
@@ -20,10 +20,17 @@ def main():
     components = [Component(c) for c in conf.components]
     manager = Manager(components=components, devices=devices)
 
+    print(conf.setups[0].network.to_kwargs())
+    # print(conf)
+
     for s in conf.setups:
         manager.create_setup(config=s)
 
-    manager.networks[0].start()
+    manager.start()
+
+
+    input()
+
 
     manager.destroy()
 

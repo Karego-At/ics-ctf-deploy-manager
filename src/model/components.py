@@ -9,7 +9,8 @@ from docker.models.containers import Container
 from docker.models.images import Image
 from docker.models.networks import Network as DockerNetwork
 
-from src.config import ComponentConfig, ConnectionOptions, RunOptions
+from src.config.options import ConnectionOptions, RunOptions
+from src.config.components import ComponentConfig
 
 logger = logging.getLogger(__name__)
 
