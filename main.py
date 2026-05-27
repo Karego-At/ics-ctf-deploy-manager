@@ -4,6 +4,7 @@ from src.model.components import Component
 from src.model.manager import Manager
 
 path = os.getcwd()
+# path = "/"
 infra_path      = "./config/infrastructure.yaml"
 setups_path     = "./config/challenge.yaml"
 components_path = os.path.join(path, "components")
@@ -20,7 +21,10 @@ def main():
 
     manager.setup(challenge.setups)
     manager.start()
-    input()
+    # input()
+    import time
+
+    time.sleep(60)
     manager.destroy()
 
 
