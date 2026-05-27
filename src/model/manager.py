@@ -50,7 +50,11 @@ class Manager:
             
             for p in config.peers:
                 comp = next(c for c in self.components if c.name == p.component)  
-                peer = create_peer(component=comp, network=network.network, connection_options=p.connection_options, run_options=p.run_options)
+                peer = create_peer(component=comp, 
+                                   network=network.network,
+                                   connection_options=p.connection_options,
+                                   run_options=p.run_options, 
+                                   **(p.args or {}))
                 network.add_peer(peer)
         except Exception as e:
             self.destroy()

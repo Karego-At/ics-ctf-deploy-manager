@@ -35,7 +35,8 @@ class PeerConfig(BaseModel):
     component: str        
     connection_options: ConnectionOptions = Field(default_factory=ConnectionOptions)
     run_options: RunOptions = Field(default_factory=RunOptions)
-    settings: dict | None = None
+    args: dict | None = None
+    # settings: dict | None = None
 
     # @model_validator(mode="after")
     # def _coerce_settings(self) -> "PeerConfig":

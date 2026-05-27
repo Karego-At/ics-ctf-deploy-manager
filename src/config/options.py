@@ -18,7 +18,7 @@ class ConnectionOptions(BaseModel):
 
 
 class RunOptions(BaseModel):
-    # ports: dict[int, int] = Field(default_factory=dict)
+    ports: dict[int, int] = Field(default_factory=dict)
     # volumes: dict[str, VolumeMount] = Field(default_factory=dict)
     # tmpfs: dict[str, str] = Field(default_factory=dict)  # {"/run": "size=64m"}
     # environment: dict[str, str] = Field(default_factory=dict)

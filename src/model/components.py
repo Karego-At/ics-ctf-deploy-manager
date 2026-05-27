@@ -130,7 +130,6 @@ class ConnectablePeer(Peer):
         # network_options: dict | None = None,
         # run_options: dict | None = None,
         host_port: int | None = None,   
-
     ):
         network_suffix = random.randint(1000, 9999)
         self.external_network: DockerNetwork = client.networks.create(
@@ -217,3 +216,4 @@ def create_peer(
     if peer_cls is None:
         raise ValueError(f"Unknown component type: {component.type}")
     return peer_cls(component, network, network_options=connection_options, run_options=run_options, **kwargs)
+
