@@ -6,7 +6,7 @@
 from src.config.devices import AnyDevice
 # ComponentConfig, ConnectionOptions, RunOptions, AnyDevice
 
-from src.model.components import Component, create_peer
+from src.model.components.components import Component, create_peer
 from src.model.networks import BaseNetwork
 from src.config.loader import SetupConfig
 

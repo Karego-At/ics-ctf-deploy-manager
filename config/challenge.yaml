@@ -13,12 +13,12 @@ setups:
         connection_options: {}
         run_options: {}
         settings: 
-          mtu: 1200
-      # - component: attacker-ssh
-      #   args: 
-      #     host_port: 2020
-      # - component: attacker-ssh
-      #   args:
-      #     host_port: 4040
-      # - component: hw-pnet-dev
-      # # - component: non-existing
+          data: CF-Test123
+      - component: participant-ssh
+        args: 
+          host_port: 2020
+      - component: participant-ssh
+        args:
+          host_port: 4040
+      - component: hw-pnet-dev
+      # - component: non-existing

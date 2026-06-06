@@ -1,6 +1,6 @@
 import os, sys
 from src.config.loader import get_infrastructure, get_challenge
-from src.model.components import Component
+from src.model.components.components import Component
 from src.model.manager import Manager
 
 path = os.getcwd()

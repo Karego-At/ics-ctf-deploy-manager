@@ -12,6 +12,9 @@ from docker.models.networks import Network as DockerNetwork
 from src.config.options import ConnectionOptions, RunOptions
 from src.config.components import ComponentConfig
 
+
+# from src.model.components.advanced import Driver, get_driver
+
 logger = logging.getLogger(__name__)
 
 client = docker.from_env()
@@ -33,8 +36,9 @@ class Component:
         self.name = config.name
         self.path = config.path
         self.type = config.type
+        self.driver = config.driver
         self.image = self._build()
-        self.instances: list[Container] = []
+        # self.instances: list[Container] = []
 
     def _build(self) -> Image:
         image, _logs = client.images.build(path=self.path)
@@ -55,6 +59,7 @@ class Peer:
         # run_options: RunOptions,
         network_options: ConnectionOptions,
         run_options: RunOptions,
+        driver: Driver = None,
         **kwargs
     ):
         self.network = network
@@ -71,6 +76,7 @@ class Peer:
             **run_options.to_kwargs(),
             **kwargs
         )
+        self.driver = get_driver(component.driver) if component.driver else None
 
 
     def start(self) -> None:
@@ -83,6 +89,16 @@ class Peer:
         except APIError as e:
             logger.error("Failed to start container %s: %s", self.container.short_id, e)
             raise
+
+    
+
+    def configure(self, **kwargs):
+        if self.driver is None:
+            logger.info("No driver configured for container %s, skipping configure.", self.container.short_id)
+            return
+        self.driver.configure(self, **kwargs)
+
+
 
     def destroy(self) -> None:
 
@@ -118,102 +134,15 @@ class Peer:
 
 
 
-class ConnectablePeer(Peer):
+class Driver:
+    def __init__(self):
+        pass
+
+    def configure(self, peer: "Peer", data: str):
+        pass
 
 
-    def __init__(
-        self,
-        component: Component,
-        network: DockerNetwork,
-        network_options: ConnectionOptions,
-        run_options: RunOptions,
-        # network_options: dict | None = None,
-        # run_options: dict | None = None,
-        host_port: int | None = None,   
-    ):
-        network_suffix = random.randint(1000, 9999)
-        self.external_network: DockerNetwork = client.networks.create(
-            f"external_network_{network_suffix}", driver="bridge"
-        )
 
 
-        self.host_port = host_port or get_first_free_port()
-        additional_options = {"ports": {component.config.port: self.host_port}}
 
-        super().__init__(
-            component,
-            self.external_network,
-            network_options=None,   
-            run_options=run_options,
-            **additional_options
-        )
-        network.connect(
-            self.container,
-            **(network_options.to_kwargs() if network_options else {})
-        )
-
-        self.network = network
-
-
-    def destroy(self) -> None:
-
-        errors: list[Exception] = []
-
-        try:
-            self.network.disconnect(self.container, force=True)
-            logger.info(
-                "Container %s disconnected from internal network %s.",
-                self.container.short_id,
-                self.network.name,
-            )
-        except NotFound:
-            logger.warning(
-                "Container %s or internal network not found — disconnect skipped.",
-                self.container.short_id,
-            )
-        except APIError as e:
-            logger.error(
-                "Error disconnecting container %s from internal network: %s",
-                self.container.short_id,
-                e,
-            )
-            errors.append(e)
-
-        try:
-            super().destroy()
-        except RuntimeError as e:
-            errors.append(e)
-
-        try:
-            self.external_network.remove()
-            logger.info("External network %s removed.", self.external_network.name)
-        except NotFound:
-            logger.warning("External network %s already removed.", self.external_network.name)
-        except APIError as e:
-            logger.error("Error removing external network %s: %s", self.external_network.name, e)
-            errors.append(e)
-
-        if errors:
-            raise RuntimeError(
-                f"ConnectablePeer.destroy() finished with {len(errors)} error(s): {errors}"
-            )
-
-
-_PEERS: dict[str, type[Peer]] = {
-    "connectable": ConnectablePeer,
-    "simple": Peer,
-}
-
-
-def create_peer(
-    component: Component,
-    network: DockerNetwork,
-    connection_options: dict | None = None,
-    run_options: dict | None = None,
-    **kwargs
-) -> Peer:
-    peer_cls = _PEERS.get(component.type)
-    if peer_cls is None:
-        raise ValueError(f"Unknown component type: {component.type}")
-    return peer_cls(component, network, network_options=connection_options, run_options=run_options, **kwargs)
 

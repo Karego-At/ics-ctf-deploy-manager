@@ -1,6 +1,6 @@
 import docker
 from docker.models.networks import Network as DockerNetwork
-from src.model.components import Peer
+from src.model.components.components import Peer
 import logging
 from docker.errors import NotFound, APIError
 import random

@@ -15,7 +15,7 @@ components:
 
   - name: attacker-ssh
     type: connectable        
-    path: ${components_path}/attacker-ssh
+    path: ${components_path}/participant-ssh
     port: 22
 
 
