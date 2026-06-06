@@ -8,17 +8,20 @@ setups:
       # ipam: {} 
     devices: [plc1]
     peers:
-      - name:
-        component:  hw-pnet-dev
-        connection_options: {}
-        run_options: {}
-        settings: 
-          data: CF-Test123
-      # - component: participant-ssh
-      #   args: 
-      #     host_port: 2020
-      # - component: participant-ssh
-      #   args:
-      #     host_port: 4040
+      # - name:
+      #   component:  hw-pnet-dev
+      #   connection_options: {}
+      #   run_options: {}
+      #   settings: 
+      #     data: CF-Test123
+      - component: participant-ssh
+        args: 
+          host_port: 2020
+        settings:
+          users:
+            - name: red-team
+              password: 12345
+            - name: blue-team
+              password: 54321
       # - component: hw-pnet-dev
       # - component: non-existing

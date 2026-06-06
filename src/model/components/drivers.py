@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
 import tarfile
 import io
+import json
+
 
 
 
@@ -36,10 +38,31 @@ class PnetDriver(Driver):
         peer.container.put_archive(path="/", data=tar_stream)
 
 
+class SshDriver(Driver):
+    def configure(self, peer: Peer, users: list = None):
+        if not users:
+            return
+
+        content = json.dumps({"users": users}).encode("utf-8")  # обернули в {"users": [...]}
+
+        tar_stream = io.BytesIO()
+        with tarfile.open(fileobj=tar_stream, mode="w") as tar:
+            info = tarfile.TarInfo(name="users-setup.json")
+            info.size = len(content)
+            tar.addfile(info, io.BytesIO(content))
+        tar_stream.seek(0)
+
+        peer.container.put_archive(path="/ws", data=tar_stream)
+
+
+
+    
 _DRIVERS: dict[str, type[Driver]] = {
     "pnet-driver": PnetDriver,
     "attacker-ssh-driver": Driver,
+    "ssh-driver": SshDriver,
 }
+
 
 
 def get_driver(driver: str | None) -> Driver | None:

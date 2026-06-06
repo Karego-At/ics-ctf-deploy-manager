@@ -13,7 +13,7 @@ from src.config.options import ConnectionOptions, RunOptions
 from src.config.components import ComponentConfig
 
 
-from src.model.components.drivers import Driver, get_driver
+from src.model.components.drivers import get_driver
 
 logger = logging.getLogger(__name__)
 
@@ -144,7 +144,8 @@ class ConnectablePeer(Peer):
         run_options: RunOptions,
         # network_options: dict | None = None,
         # run_options: dict | None = None,
-        host_port: int | None = None,   
+        host_port: int | None = None,  
+        **kwargs 
     ):
         network_suffix = random.randint(1000, 9999)
         self.external_network: DockerNetwork = client.networks.create(
@@ -158,10 +159,13 @@ class ConnectablePeer(Peer):
         super().__init__(
             component,
             self.external_network,
-            network_options=None,   
+            network_options=None,
             run_options=run_options,
-            **additional_options
+            **{**additional_options, **kwargs} 
         )
+
+
+
         network.connect(
             self.container,
             **(network_options.to_kwargs() if network_options else {})

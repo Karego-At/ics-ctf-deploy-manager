@@ -17,5 +17,6 @@ components:
     type: connectable        
     path: ${components_path}/participant-ssh
     port: 22
+    driver: ssh-driver
 
 
