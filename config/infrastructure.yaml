@@ -2,7 +2,7 @@
 devices:
   - name: plc1
     type: PLC
-    nw: "192.168.101.0/24"
+    nw: "192.168.102.0/24"
     nic: "wlp1s0" #"enx00e04c024b80"
 
 
@@ -13,7 +13,7 @@ components:
     path: ${components_path}/pnet-dev
     driver: pnet-driver
 
-  - name: attacker-ssh
+  - name: participant-ssh
     type: connectable        
     path: ${components_path}/participant-ssh
     port: 22

@@ -9,6 +9,13 @@ infra_path      = "./config/infrastructure.yaml"
 setups_path     = "./config/challenge.yaml"
 components_path = os.path.join(path, "components")
 
+import logging
+
+# logging.basicConfig(
+#     level=logging.DEBUG,
+#     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+# )
+
 
 def main():
     infra  = get_infrastructure(infra_path, components_path)
@@ -21,10 +28,10 @@ def main():
 
     manager.setup(challenge.setups)
     manager.start()
-    # input()
+    input()
     import time
 
-    time.sleep(60)
+    # time.sleep(60)
     manager.destroy()
 
 

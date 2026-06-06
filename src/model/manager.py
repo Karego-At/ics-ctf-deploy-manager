@@ -50,21 +50,24 @@ class Manager:
                 ipam = {}
     
             network = BaseNetwork(name=nw_conf.name, driver=nw_conf.driver, options=options, ipam=ipam)
-    
+
             self.networks.append(network) 
             
             for p in config.peers:
                 comp = next(c for c in self.components if c.name == p.component)  
+                logger.debug("create peer", comp, network.network, p)
                 peer = create_peer(component=comp, 
                                    network=network.network,
                                    connection_options=p.connection_options,
                                    run_options=p.run_options, 
+                                   settings = p.settings,
                                    **(p.args or {}))
                 network.add_peer(peer)
         except Exception as e:
             self.destroy()
             print(e)
-        
+    
+
     
     def start(self):
         for network in self.networks:

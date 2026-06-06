@@ -33,6 +33,10 @@ class BaseNetwork:
         else:
             ipam_config = None
 
+
+
+        logger.debug("create network", self.driver, options, ipam)
+
         self.network = client.networks.create(
             name = self.name,
             driver=self.driver,
