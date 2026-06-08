@@ -3,12 +3,12 @@ devices:
   - name: plc1
     type: PLC
     nw: "192.168.102.0/24"
-    nic: "wlp1s0" #"enx00e04c024b80"
+    nic: "enx00e04c024b80"
 
 
 
 components:
-  - name: hw-pnet-dev
+  - name: ctf-sensor
     type: simple
     path: ${components_path}/pnet-dev
     driver: pnet-driver
@@ -19,4 +19,8 @@ components:
     port: 22
     driver: ssh-driver
 
+  # - name: attack-bot
+  #   type: simple
+  #   path: ${components_path}/attacker-auto
+  #   driver: attacker-driver
 

@@ -17,6 +17,19 @@ class Driver:
     def __init__(self):
         pass
 
+    def _make_tar_archive(self, filename: str, content: bytes) -> io.BytesIO:
+        tar_stream = io.BytesIO()
+        with tarfile.open(fileobj=tar_stream, mode="w") as tar:
+            info = tarfile.TarInfo(name=filename)
+            info.size = len(content)
+            tar.addfile(info, io.BytesIO(content))
+        tar_stream.seek(0)
+        return tar_stream
+
+    def _put_file(self, peer: Peer, filename: str, content: bytes, path: str = "/"):
+        tar_stream = self._make_tar_archive(filename, content)
+        peer.container.put_archive(path=path, data=tar_stream)
+
     def configure(self, peer: Peer, data: str):
         pass
 
@@ -27,15 +40,7 @@ class PnetDriver(Driver):
 
     def configure(self, peer: Peer, data: str):
         content = data.encode("utf-8")
-
-        tar_stream = io.BytesIO()
-        with tarfile.open(fileobj=tar_stream, mode="w") as tar:
-            info = tarfile.TarInfo(name="flag.txt")
-            info.size = len(content)
-            tar.addfile(info, io.BytesIO(content))
-        tar_stream.seek(0)
-
-        peer.container.put_archive(path="/", data=tar_stream)
+        self._put_file(peer, "flag.txt", content, path="/")
 
 
 class SshDriver(Driver):
@@ -43,24 +48,19 @@ class SshDriver(Driver):
         if not users:
             return
 
-        content = json.dumps({"users": users}).encode("utf-8")  # обернули в {"users": [...]}
+        content = json.dumps({"users": users}).encode("utf-8")
+        self._put_file(peer, "users-setup.json", content, path="/ws")
 
-        tar_stream = io.BytesIO()
-        with tarfile.open(fileobj=tar_stream, mode="w") as tar:
-            info = tarfile.TarInfo(name="users-setup.json")
-            info.size = len(content)
-            tar.addfile(info, io.BytesIO(content))
-        tar_stream.seek(0)
 
-        peer.container.put_archive(path="/ws", data=tar_stream)
-
+class AttackerDriver(Driver):
+    pass
 
 
     
 _DRIVERS: dict[str, type[Driver]] = {
     "pnet-driver": PnetDriver,
-    "attacker-ssh-driver": Driver,
     "ssh-driver": SshDriver,
+    "attacker-driver" : AttackerDriver
 }
 
 

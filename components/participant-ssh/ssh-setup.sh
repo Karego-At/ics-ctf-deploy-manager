@@ -80,6 +80,11 @@ jq -r '.users[] | "\(.name):\(.password)"' "$USERS_JSON" | while IFS=: read -r n
  
   echo "${name}:${password}" | chpasswd
   echo "[OK] Password set for: $name"
+
+
+# Grant sudo to everyone
+  usermod -aG sudo "$name"
+  echo "[OK] Sudo granted for: $name"
  
 done
  

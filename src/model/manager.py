@@ -37,19 +37,21 @@ class Manager:
 
         try:
             nw_conf = config.network
-            if len(config.devices) > 1:
-                raise NotImplementedError  
+            # if len(config.devices) > 1:
+            #     raise NotImplementedError  
     
-            if len(config.devices) == 1:
-                device = next(d for d in self.devices if d.name == config.devices[0]) 
-                options = {"parent": device.nic}
-                ipam = {"subnet": str(device.nw)}
-            else:
+            # if len(config.devices) == 1:
+            #     device = next(d for d in self.devices if d.name == config.devices[0]) 
+            #     options = {"parent": device.nic}
+            #     ipam = {"subnet": str(device.nw)}
+            # else:
             
-                options = {}
-                ipam = {}
-    
-            network = BaseNetwork(name=nw_conf.name, driver=nw_conf.driver, options=options, ipam=ipam)
+            #     options = {}
+            #     ipam = {}
+            # network = BaseNetwork(name=nw_conf.name, driver=nw_conf.driver, options=options, ipam=ipam)
+
+            network = BaseNetwork(name=nw_conf.name, driver=nw_conf.driver, options=nw_conf.options, ipam=nw_conf.ipam)
+
 
             self.networks.append(network) 
             
