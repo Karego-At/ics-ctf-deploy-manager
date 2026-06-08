@@ -4,17 +4,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update && apt-get install -y \
-    openssh-server \
     nmap \
     tcpdump \
-    tshark \
     python3 \
     python3-pip \
+    python3-venv \
     iproute2 \
     iputils-ping \
-    arpspoof \
-    netcat-openbsd 
-   && rm -rf /var/lib/apt/lists/*
+    dsniff 
+#    && rm -rf /var/lib/apt/lists/*
 
 
 

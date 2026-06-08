@@ -62,37 +62,3 @@ def classify_frame_id(frame_id: int) -> str:
         return "Unknown"
 
 
-def sniff_profinet(
-    interface: str = "eth0",
-    timeout:   int  = 30,
-    count:     int  = 0,
-    callback = None,
-) -> list[dict]:
-    """
-    Слушает Profinet трафик на интерфейсе.
-
-    :param interface: Сетевой интерфейс
-    :param timeout:   Сколько секунд слушать (0 = бесконечно)
-    :param count:     Сколько пакетов поймать (0 = бесконечно)
-    :param callback:  Опциональная функция для обработки каждого пакета на лету
-    :return: Список распарсенных пакетов
-    """
-    captured = []
-
-    def handle(pkt):
-        parsed = parse_pnet_packet(pkt)
-        if parsed is None:
-            return
-        captured.append(parsed)
-        if callback:
-            callback(parsed)
-
-    sniff(
-        iface=interface,
-        prn=handle,
-        timeout=timeout if timeout > 0 else None,
-        count=count if count > 0 else 0,
-        store=False,
-    )
-
-    return captured
