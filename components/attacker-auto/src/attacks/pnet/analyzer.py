@@ -76,81 +76,79 @@ class Dissector(threading.Thread):
         }
 
 
-# ─── Layer 3: бизнес-логика ───────────────────────────────────────────────────
+# # ─── Layer 3: бизнес-логика ───────────────────────────────────────────────────
 
-class Analyzer(threading.Thread):
-    """
-    Читает распарсенные пакеты и выполняет высокоуровневую логику.
-    Сюда добавляешь алерты, статистику, запись в БД — что угодно.
-    """
+# class Analyzer(threading.Thread):
+#     """
+#     Читает распарсенные пакеты и выполняет высокоуровневую логику.
+#     Сюда добавляешь алерты, статистику, запись в БД — что угодно.
+#     """
 
-    def __init__(self, parsed_queue: queue.Queue):
-        super().__init__(daemon=True)
-        self.parsed_queue = parsed_queue
-        self.results: list[dict] = []
+#     def __init__(self, parsed_queue: queue.Queue):
+#         super().__init__(daemon=True)
+#         self.parsed_queue = parsed_queue
+#         self.results: list[dict] = []
 
-        # Регистр обработчиков: frame_type → [handler, ...]
-        self._handlers: dict[str, list] = {}
-        # Глобальные обработчики (на любой пакет)
-        self._global_handlers: list = []
+#         # Регистр обработчиков: frame_type → [handler, ...]
+#         self._handlers: dict[str, list] = {}
+#         # Глобальные обработчики (на любой пакет)
+#         self._global_handlers: list = []
 
-    # --- публичный API --------------------------------------------------------
+#     # --- публичный API --------------------------------------------------------
 
-    def on(self, frame_type: str):
-        """Декоратор: вызывать функцию при конкретном типе фрейма."""
-        def decorator(fn):
-            self._handlers.setdefault(frame_type, []).append(fn)
-            return fn
-        return decorator
+#     def on(self, frame_type: str):
+#         """Декоратор: вызывать функцию при конкретном типе фрейма."""
+#         def decorator(fn):
+#             self._handlers.setdefault(frame_type, []).append(fn)
+#             return fn
+#         return decorator
 
-    def on_any(self, fn):
-        """Вызывать функцию на каждый пакет."""
-        self._global_handlers.append(fn)
-        return fn
+#     def on_any(self, fn):
+#         """Вызывать функцию на каждый пакет."""
+#         self._global_handlers.append(fn)
+#         return fn
 
-    # --- внутренняя логика ----------------------------------------------------
+#     # --- внутренняя логика ----------------------------------------------------
 
-    def run(self):
-        while True:
-            pkt = self.parsed_queue.get()
-            if pkt is SENTINEL:
-                break
-            self.results.append(pkt)
-            self._dispatch(pkt)
+#     def run(self):
+#         while True:
+#             pkt = self.parsed_queue.get()
+#             if pkt is SENTINEL:
+#                 break
+#             self.results.append(pkt)
+#             self._dispatch(pkt)
 
-    def _dispatch(self, pkt: dict):
-        for fn in self._global_handlers:
-            fn(pkt)
-        for fn in self._handlers.get(pkt["frame_type"], []):
-            fn(pkt)
+#     def _dispatch(self, pkt: dict):
+#         for fn in self._global_handlers:
+#             fn(pkt)
+#         for fn in self._handlers.get(pkt["frame_type"], []):
+#             fn(pkt)
 
 
-# ─── Точка входа ─────────────────────────────────────────────────────────────
 
-def run_pipeline(interface="eth0") -> list[dict]:
+def run_pipeline(interface: str, device: str, controller:str): # -> list[dict]:
     raw_q    = queue.Queue()
     parsed_q = queue.Queue()
 
     sniffer   = Sniffer(raw_q, interface=interface)
     dissector = Dissector(raw_q, parsed_q)
-    analyzer  = Analyzer(parsed_q)
 
-    # Регистрируем бизнес-логику
-    @analyzer.on("ALARM_HIGH")
-    def on_alarm(pkt):
-        print(f"[ALERT] ALARM_HIGH от {pkt['src_mac']} в {pkt['timestamp']}")
+    # analyzer  = Analyzer(parsed_q)
 
-    @analyzer.on_any
-    def log_all(pkt):
-        print(f"[PKT] {pkt['frame_type']:30s} | {pkt['src_mac']} → {pkt['dst_mac']}")
+    # @analyzer.on("ALARM_HIGH")
+    # def on_alarm(pkt):
+    #     print(f"[ALERT] ALARM_HIGH от {pkt['src_mac']} в {pkt['timestamp']}")
+
+    # @analyzer.on_any
+    # def log_all(pkt):
+    #     print(f"[PKT] {pkt['frame_type']:30s} | {pkt['src_mac']} → {pkt['dst_mac']}")
 
     sniffer.start()
     dissector.start()
-    analyzer.start()
+    # analyzer.start()
 
-    # Ждём завершения всего пайплайна
     sniffer.join()
     dissector.join()
-    analyzer.join()
+    # analyzer.join()
 
-    return analyzer.results
+    # return analyzer.results

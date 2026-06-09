@@ -1,8 +1,7 @@
 
-settings: 
-  options:
-    
-
-  scenario:
-    name: 
-    params:
+options: 
+  interface: eth0
+scenario:
+  name: dcp-destroy
+  # name: nothing
+  

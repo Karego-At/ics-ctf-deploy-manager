@@ -10,8 +10,7 @@ PROFINET_ETHERTYPE = 0x8892
 
 def parse_pnet_packet(pkt) -> dict | None:
     """
-    Парсит сырой Profinet RT пакет.
-    Возвращает None если пакет не является Profinet.
+    parse raw Profinet pkt. Return None if not profinet pkt.
     """
     if not pkt.haslayer(Ether):
         return None
