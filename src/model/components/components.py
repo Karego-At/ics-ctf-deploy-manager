@@ -41,7 +41,10 @@ class Component:
         self.driver = config.driver
 
     def _build(self) -> Image:
+        logger.info("building component image", self.name)
         image, _logs = client.images.build(path=self.path)
+        logger.info("building image dome", self.name)
+
         return image
 
 

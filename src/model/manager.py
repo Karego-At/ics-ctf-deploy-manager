@@ -51,8 +51,6 @@ class Manager:
             # network = BaseNetwork(name=nw_conf.name, driver=nw_conf.driver, options=options, ipam=ipam)
 
             network = BaseNetwork(name=nw_conf.name, driver=nw_conf.driver, options=nw_conf.options, ipam=nw_conf.ipam)
-
-
             self.networks.append(network) 
             
             for p in config.peers:

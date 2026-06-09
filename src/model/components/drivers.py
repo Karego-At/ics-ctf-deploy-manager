@@ -30,7 +30,7 @@ class Driver:
         tar_stream = self._make_tar_archive(filename, content)
         peer.container.put_archive(path=path, data=tar_stream)
 
-    def configure(self, peer: Peer, data: str):
+    def configure(self, peer: Peer):
         pass
 
 

@@ -1,48 +1,70 @@
 setups:
+
   - name:
     network:
       name:
       driver: "macvlan"
       options: {"parent": wlp1s0}
-      
+      # options: {parent: enx00e04c024b80}
       ipam: {
-        subnet: "192.168.101.0/24"
+        subnet: "192.168.1.0/24"
       } 
-    devices: [plc1]
-    peers:
-      # - name:
-      #   component:  ctf-sensor
-      #   connection_options: {}
-      #   run_options: {}
-      #   settings: 
-      #     data: CF-Test123
-      - component: participant-ssh
-        connection_options: {
-          ipv4_address: "192.168.101.10"
-        }
-        run_options: {
+      
+      peers:
+        - component: s7-ctf-hmi
 
-        }
-        args: 
-          host_port: 2020
-        settings:
-          users:
-            - name: red-team
-              password: 12345
-            - name: blue-team
-              password: 54321
-      - component: participant-ssh
-        args: 
-          host_port: 2021
-        settings:
-          users:
-            - name: ctf
-              password: 12345
+
+
+
+  # - name:
+  #   network:
+  #     name:
+  #     driver: "macvlan"
+  #     # options: {"parent": wlp1s0}
+  #     options: {parent: enx00e04c024b80}
+  #     ipam: {
+  #       subnet: "192.168.101.0/24"
+  #     } 
+  #   devices: [plc1]
+  #   peers:
+  #     - name:
+  #       component:  ctf-sensor
+  #       connection_options: {
+  #         ipv4_address: "192.168.101.20"
+  #       }
+  #       run_options: {}
+  #       settings: 
+  #         data: CFAB123489
+      # - component: participant-ssh
+      #   connection_options: {
+      #     ipv4_address: "192.168.101.10"
+      #   }
+      #   run_options: {
+
+      #   }
+      #   args: 
+      #     host_port: 2020
+      #   settings:
+      #     users:
+      #       - name: red-team
+      #         password: 12345
+      #       - name: blue-team
+      #         password: 54321
+      # - component: participant-ssh
+      #   args: 
+      #     host_port: 2021
+      #   settings:
+      #     users:
+      #       - name: ctf
+      #         password: 12345
+
+      # - component: attack-bot
+      # - component: ctf-sensor
+      # - component: ctf-sensor
       # - component: participant-ssh
       #   args:
       #     host_port: 2021
       #   settings:
       #     - name: ctf
       #       password: 123
-      # - component: hw-pnet-dev
       # - component: non-existing

@@ -11,10 +11,10 @@ components_path = os.path.join(path, "components")
 
 import logging
 
-# logging.basicConfig(
-#     level=logging.DEBUG,
-#     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
-# )
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+)
 
 
 def main():

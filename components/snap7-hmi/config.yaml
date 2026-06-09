@@ -4,9 +4,16 @@ output_settings:
   mappings:
     - input: "HelloWorld"
       output: "Hello World Dear Reader"
-    - input: "123456789"
+    - input: CFAB123489
       output: "Correct"
     - input: "STOP"
       output: "Emergency stop acknowledged"
     - input: "RUN"
       output: "Process running normally"
+
+connection_settings:
+  ip: "192.168.1.55"
+  tcp_port: 102
+  rack: 0
+  slot: 1
+  POLL_INTERVAL: 1.0  
