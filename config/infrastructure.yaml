@@ -8,21 +8,21 @@ devices:
 
 
 components:
-  # - name: ctf-sensor
-  #   type: simple
-  #   path: ${components_path}/pnet-dev
-  #   driver: pnet-driver
+  - name: ctf-sensor
+    type: simple
+    path: ${components_path}/pnet-dev
+    driver: pnet-driver
 
-  # - name: participant-ssh
-  #   type: connectable        
-  #   path: ${components_path}/participant-ssh
-  #   port: 22
-  #   driver: ssh-driver
+  - name: participant-ssh
+    type: connectable        
+    path: ${components_path}/participant-ssh
+    port: 22
+    driver: ssh-driver
 
-  # - name: attack-bot
-  #   type: simple
-  #   path: ${components_path}/attacker-auto
-  #   # driver: attacker-driver
+  - name: attack-bot
+    type: simple
+    path: ${components_path}/attacker-auto
+    # driver: attacker-driver
 
   - name: s7-ctf-hmi
     type: connectable

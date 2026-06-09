@@ -43,4 +43,6 @@ if __name__ == "__main__":
     print(f"[HMI] Web      : http://0.0.0.0:5000")
     print(f"[HMI] Ctrl+C to stop")
 
+    os.environ["PYTHONUNBUFFERED"] = "1"
+
     app.run(host="0.0.0.0", port=5000, threaded=True, debug=False)
