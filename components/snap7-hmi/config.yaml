@@ -1,0 +1,12 @@
+output_settings:
+  unreachable: "Congrats, you hacked plc, flag for next level CT-12345"
+  default: "Incorrect Data"
+  mappings:
+    - input: "HelloWorld"
+      output: "Hello World Dear Reader"
+    - input: "123456789"
+      output: "Correct"
+    - input: "STOP"
+      output: "Emergency stop acknowledged"
+    - input: "RUN"
+      output: "Process running normally"

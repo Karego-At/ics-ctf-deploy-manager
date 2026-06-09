@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HMI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: #0a0c0f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Share Tech Mono', 'Courier New', monospace;
+  }
+  #msg {
+    font-size: clamp(24px, 4vw, 48px);
+    color: #e8a020;
+    letter-spacing: 0.05em;
+    text-align: center;
+    padding: 0 32px;
+    word-break: break-word;
+    max-width: 900px;
+  }
+</style>
+</head>
+<body>
+  <div id="msg">—</div>
+<script>
+  const es = new EventSource("/stream");
+  es.onmessage = function(e) {
+    const d = JSON.parse(e.data);
+    document.getElementById("msg").textContent = d.output || "—";
+  };
+</script>
+</body>
+</html>
