@@ -28,3 +28,8 @@ components:
     type: connectable
     path: ${components_path}/snap7-hmi
     port: 5000
+
+  - name: demo-ssh
+    type: connectable
+    path: ${components_path}/demo-ssh
+    port: 22
