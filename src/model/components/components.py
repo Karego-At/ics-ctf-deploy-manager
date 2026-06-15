@@ -62,6 +62,7 @@ class Peer:
         run_options: RunOptions,
         # driver: Driver = None,
         settings: dict = None,
+        name:str = None,
         **kwargs
     ):
         self.network = network
@@ -74,6 +75,7 @@ class Peer:
         self.container = client.containers.create(
             image=self.component.image.id,
             network=self.network.name,
+            name=name,
             networking_config=networking_config,
             **run_options.to_kwargs(),
             **kwargs

@@ -60,6 +60,7 @@ class Manager:
                                    network=network.network,
                                    connection_options=p.connection_options,
                                    run_options=p.run_options, 
+                                   name = p.name,
                                    settings = p.settings,
                                    **(p.args or {}))
                 network.add_peer(peer)
@@ -92,7 +93,6 @@ class Manager:
         
 
         
-
 
 
 

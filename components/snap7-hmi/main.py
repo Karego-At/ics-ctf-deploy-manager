@@ -7,8 +7,8 @@ import os
 
 _OUTPUT_CONFIG     = "output_config.yaml"
 _CONNECTION_CONFIG = "connection_config.yaml"
-# CONF_FOLDER = os.path.join(os.getcwd(), "config")
-CONF_FOLDER = "/app/config"
+CONF_FOLDER = os.path.join(os.getcwd(), "config")
+# CONF_FOLDER = "/app/config"
 
 
 if __name__ == "__main__":
