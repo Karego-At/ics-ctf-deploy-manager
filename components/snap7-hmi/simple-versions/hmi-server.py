@@ -1,14 +1,11 @@
 """
-Web HMI Server — читает IB20-IB29 с PLC, применяет YAML-маппинг,
-раздаёт результат в браузер через Server-Sent Events (SSE).
-
-Зависимости:
+dependencies:
     pip install python-snap7 flask pyyaml
 
-Запуск:
+launch:
     python hmi_server.py
 
-Браузер:
+browser:
     http://<host-ip>:5000
 """
 

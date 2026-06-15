@@ -7,13 +7,12 @@ from scapy.all import sniff
 from scapy.layers.l2 import Ether
 
 PROFINET_ETHERTYPE = 0x8892
-SENTINEL = None  # сигнал завершения
+SENTINEL = None 
 
 
-# ─── Layer 1: захват ──────────────────────────────────────────────────────────
+# ─── Layer 1: capture ──────────────────────────────────────────────────────────
 
 class Sniffer(threading.Thread):
-    """Только захватываетырые пакеты и кладёт в очередь."""
 
     def __init__(self, raw_queue: queue.Queue, interface="eth0" ):
         super().__init__(daemon=True)
@@ -25,18 +24,17 @@ class Sniffer(threading.Thread):
     def run(self):
         sniff(
             iface=self.interface,
-            prn=self.raw_queue.put,  # просто кладём сырой пакет
+            prn=self.raw_queue.put, 
             # timeout=self.timeout,
             # count=self.count,
             store=False,
         )
-        self.raw_queue.put(SENTINEL)  # говорим downstream'у, что закончили
+        self.raw_queue.put(SENTINEL) 
 
 
-# ─── Layer 2: диссектор ───────────────────────────────────────────────────────
+# ─── Layer 2: dissection ───────────────────────────────────────────────────────
 
 class Dissector(threading.Thread):
-    """Читает сырые пакеты, парсит, кладёт структуры в следующую очередь."""
 
     def __init__(self, raw_queue: queue.Queue, parsed_queue: queue.Queue):
         super().__init__(daemon=True)
@@ -76,39 +74,33 @@ class Dissector(threading.Thread):
         }
 
 
-# # ─── Layer 3: бизнес-логика ───────────────────────────────────────────────────
+# # ─── Layer 3: high level logic  ───────────────────────────────────────────────────
 
 # class Analyzer(threading.Thread):
-#     """
-#     Читает распарсенные пакеты и выполняет высокоуровневую логику.
-#     Сюда добавляешь алерты, статистику, запись в БД — что угодно.
-#     """
+
 
 #     def __init__(self, parsed_queue: queue.Queue):
 #         super().__init__(daemon=True)
 #         self.parsed_queue = parsed_queue
 #         self.results: list[dict] = []
 
-#         # Регистр обработчиков: frame_type → [handler, ...]
+#         # handler registry: frame_type → [handler, ...]
 #         self._handlers: dict[str, list] = {}
-#         # Глобальные обработчики (на любой пакет)
 #         self._global_handlers: list = []
 
-#     # --- публичный API --------------------------------------------------------
+#     # ---  API --------------------------------------------------------
 
 #     def on(self, frame_type: str):
-#         """Декоратор: вызывать функцию при конкретном типе фрейма."""
 #         def decorator(fn):
 #             self._handlers.setdefault(frame_type, []).append(fn)
 #             return fn
 #         return decorator
 
 #     def on_any(self, fn):
-#         """Вызывать функцию на каждый пакет."""
 #         self._global_handlers.append(fn)
 #         return fn
 
-#     # --- внутренняя логика ----------------------------------------------------
+#     # --- internal logic ----------------------------------------------------
 
 #     def run(self):
 #         while True:

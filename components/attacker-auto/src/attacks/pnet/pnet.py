@@ -35,10 +35,6 @@ def parse_pnet_packet(pkt) -> dict | None:
 
 
 def classify_frame_id(frame_id: int) -> str:
-    """
-    Классифицирует тип Profinet фрейма по Frame ID.
-    Согласно IEC 61158 / Profinet спецификации.
-    """
     if 0x0020 <= frame_id <= 0x001F:
         return "PTCP (Time Sync)"
     elif 0x0100 <= frame_id <= 0x7FFF:

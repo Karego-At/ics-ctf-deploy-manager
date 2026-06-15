@@ -89,7 +89,6 @@ def s7_scan(devices: list[dict]) -> list[dict]:
 
     scanner = nmap.PortScanner()
 
-    # Передаём все IP одним вызовом для скорости
     hosts = " ".join(d["ip"] for d in devices)
 
     scanner.scan(
@@ -98,14 +97,12 @@ def s7_scan(devices: list[dict]) -> list[dict]:
         arguments="--script s7-info",
     )
 
-    # Индексируем исходные устройства по IP чтобы не терять mac/name
     devices_by_ip = {d["ip"]: d for d in devices}
 
     s7_devices = []
     for host in scanner.all_hosts():
         host_info = scanner[host]
 
-        # Порт 102 должен быть открыт
         try:
             port_info = host_info["tcp"][102]
         except KeyError:
@@ -114,7 +111,6 @@ def s7_scan(devices: list[dict]) -> list[dict]:
         if port_info["state"] != "open":
             continue
 
-        # Данные из скрипта s7-info
         script_output = port_info.get("script", {}).get("s7-info", "")
         s7_info = parse_s7_info(script_output)
 
@@ -151,9 +147,7 @@ def parse_s7_info(raw: str) -> dict:
 
 
 def find_plcs(s7_devices: list[dict]) -> list[dict]:
-    """
-    Фильтрует S7-устройства, оставляя только PLC.
-    """
+
     PLC_KEYWORDS = ("CPU", "CP")
 
     return [
@@ -163,9 +157,7 @@ def find_plcs(s7_devices: list[dict]) -> list[dict]:
 
 
 def find_hmis(s7_devices: list[dict]) -> list[dict]:
-    """
-    Фильтрует S7-устройства, оставляя только HMI.
-    """
+
     HMI_KEYWORDS = ("HMI", "TP", "KP", "MP", "COMFORT", "BASIC", "MOBILE")
 
     return [
