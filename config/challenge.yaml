@@ -91,7 +91,7 @@ setups:
         users:
           - name: red-team
             password: 12345
-          - name: blue-team
+          - name: test
             password: 54321
 
 
@@ -102,7 +102,7 @@ setups:
         host_port: 2021
       settings:
         users:
-          - name: ctf
+          - name: blue-team
             password: 12345
 
 
