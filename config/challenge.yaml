@@ -1,21 +1,38 @@
 setups:
 
-# - name:
-#   network:
-#     name:
-#     driver: "macvlan"
-#     options: {"parent": wlp1s0}
-#     # options: {parent: enx00e04c024b80}
-#     ipam: {
-#       subnet: "192.168.1.0/24"
-#     } 
+- name:
+  network:
+    name:
+    driver: "macvlan"
+    options: {"parent": wlp1s0}
+    # options: {parent: enx00e04c024b80}
+    # options: {parent: enx00e04c1d30a8}
+
+    ipam: {
+      subnet: "192.168.1.0/24"
+    } 
     
-#   peers:
-#   - component: s7-ctf-hmi
-#     args: 
-#       host_port: 5151
-    # - component: ctf-sensor
-    # - component: participant-ssh
+  peers:
+  - component: s7-ctf-hmi
+    args: 
+      host_port: 5151
+
+    settings:
+      output_settings:
+        unreachable: "Congrats, you hacked plc... Your flag is CF-PLC_HACKED!"
+        default: "Looks like sensor is offline... Congrats, here is your flag: CF-Red_Team_Flag!"
+        mappings:
+        - input: CF-4EDF1A6
+          output: "Sensor online!"
+
+      connection_settings:
+        ip: "192.168.1.55"
+        tcp_port: 102
+        rack: 0
+        slot: 1
+        poll_interval: 1.0  
+
+
 
 
 
@@ -25,8 +42,9 @@ setups:
   network:
     name:
     driver: "macvlan"
-    options: {"parent": wlp1s0}
+    # options: {"parent": wlp1s0}
     # options: {parent: enx00e04c024b80}
+    options: {parent: enx00e04c1d30a8}
     ipam: {
       subnet: "192.168.101.0/24"
     } 
@@ -35,42 +53,53 @@ setups:
 
 
   peers:
+
     - name:
       component:  ctf-sensor
       connection_options: {
-        ipv4_address: "192.168.101.20"
+        ipv4_address: "192.168.101.20",
+        mac_address: "fa:e4:a8:7e:c4:b6"
       }
       run_options: {}
       settings: 
-        data: CFAB123489
+        # data: CFAB123489
+        data: CF-4EDF1A6
+
+        
 
     - component: demo-ssh
+      connection_options: {
+        mac_address: "02:CF:B1:2E:F1:A6"
+        # mac_address: "02:42:ac:11:00:02"
+      }
       args: 
         host_port: 2222
 
 
-    # - component: participant-ssh
-    #   connection_options: {
-    #     ipv4_address: "192.168.101.10"
-    #   }
-    #   run_options: {
-    #   }
-    #   args: 
-    #     host_port: 2020
-    #   settings:
-    #     users:
-    #       - name: red-team
-    #         password: 12345
-    #       - name: blue-team
-    #         password: 54321
-    # - component: participant-ssh
+    - component: participant-ssh
+      connection_options: {
+        ipv4_address: "192.168.101.10"
+      }
+      run_options: {
+      }
+      args: 
+        host_port: 2020
+      settings:
+        users:
+          - name: red-team
+            password: 12345
+          - name: blue-team
+            password: 54321
 
-    #   args: 
-    #     host_port: 2021
-    #   settings:
-    #     users:
-    #       - name: ctf
-    #         password: 12345
+
+
+    - component: participant-ssh
+      args: 
+        host_port: 2021
+      settings:
+        users:
+          - name: ctf
+            password: 12345
 
 
               
@@ -78,10 +107,3 @@ setups:
       # - component: attack-bot
       # - component: ctf-sensor
       # - component: ctf-sensor
-      # - component: participant-ssh
-      #   args:
-      #     host_port: 2021
-      #   settings:
-      #     - name: ctf
-      #       password: 123
-      # - component: non-existing

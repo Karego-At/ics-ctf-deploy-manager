@@ -28,6 +28,7 @@ components:
     type: connectable
     path: ${components_path}/snap7-hmi
     port: 5000
+    driver: hmi-driver
 
   - name: demo-ssh
     type: connectable

@@ -1,12 +1,10 @@
-import os
 import yaml
 
-# ── Config file path ──────────────────────────
 
-def load(path: str) -> tuple[dict, dict]:
-    """Load output_settings and connection_settings from config.yaml"""
-    with open(path, "r", encoding="utf-8") as f:
-        raw = yaml.safe_load(f)
-    output_cfg = raw.get("output_settings", {})
-    connection_cfg = raw.get("connection_settings", {})
+def load(output_path: str, connection_path: str) -> tuple[dict, dict]:
+    """Load output and connection settings from two separate YAML files."""
+    with open(output_path, "r", encoding="utf-8") as f:
+        output_cfg = yaml.safe_load(f) or {}
+    with open(connection_path, "r", encoding="utf-8") as f:
+        connection_cfg = yaml.safe_load(f) or {}
     return output_cfg, connection_cfg

@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 import tarfile
 import io
 import json
+import yaml
 
 
 
@@ -56,11 +57,34 @@ class AttackerDriver(Driver):
     pass
 
 
+
+class HMIDriver(Driver):
+    PATH = "/app/config"
+    OUTPUT_FILE = "output_config.yaml"
+    CONNECTION_FILE = "connection_config.yaml"
+
+    def _put_yaml(self, peer: Peer, filename: str, data: dict) -> None:
+        content = yaml.dump(
+            data, default_flow_style=False, allow_unicode=True, sort_keys=False
+        ).encode("utf-8")
+        self._put_file(peer, filename, content, path=self.PATH)
+
+    def configure(self, peer: Peer,
+                  output_settings: dict = None,
+                  connection_settings: dict = None) -> None:
+        if output_settings:
+            self._put_yaml(peer, self.OUTPUT_FILE, output_settings)
+        if connection_settings:
+            self._put_yaml(peer, self.CONNECTION_FILE, connection_settings)
+
+
+
     
 _DRIVERS: dict[str, type[Driver]] = {
     "pnet-driver": PnetDriver,
     "ssh-driver": SshDriver,
-    "attacker-driver" : AttackerDriver
+    "attacker-driver" : AttackerDriver,
+    "hmi-driver": HMIDriver
 }
 
 

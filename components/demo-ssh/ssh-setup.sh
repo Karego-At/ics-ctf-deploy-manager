@@ -92,7 +92,9 @@ done
 rm -rf /ws
 echo "[INFO] Removed /ws"
 
+cp -r /scripts/. /home/demo-ctf/
 
+echo "[INFO] Copy scripts from /scripts"
 
 echo "[INFO] Starting sshd..."
 exec /usr/sbin/sshd -D
