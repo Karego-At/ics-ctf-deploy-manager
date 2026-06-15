@@ -1,4 +1,4 @@
-# CTF Infrastructure Manager
+# ICS CTF Infrastructure Manager
 
 A Python framework for orchestrating Docker-based CTF (Capture The Flag) challenge environments. It builds and wires together Docker containers (components) on isolated Docker networks according to declarative YAML configuration files.
 
