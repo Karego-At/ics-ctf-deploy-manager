@@ -1,0 +1,6 @@
+# constants.py
+
+
+
+INTERFACE: str = ""
+

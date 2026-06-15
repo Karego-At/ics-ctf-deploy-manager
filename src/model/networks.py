@@ -1,10 +1,9 @@
 import docker
 from docker.models.networks import Network as DockerNetwork
-from src.model.components import Peer
+from src.model.components.components import Peer
 import logging
 from docker.errors import NotFound, APIError
-import random
-
+from src.model.utils import suffix_generator
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +18,7 @@ class BaseNetwork:
         if name:
             self.name = name
         else:
-            network_suffix = random.randint(1000, 9999)
+            network_suffix = suffix_generator() # random.randint(1000, 9999)
             self.name = f"internal_network_{network_suffix}"
         self.driver = driver
         self.peers: list[Peer] = []
@@ -32,6 +31,10 @@ class BaseNetwork:
             )
         else:
             ipam_config = None
+
+
+
+        logger.debug("create network", self.driver, options, ipam)
 
         self.network = client.networks.create(
             name = self.name,

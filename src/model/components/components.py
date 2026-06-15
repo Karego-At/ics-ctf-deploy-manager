@@ -1,5 +1,4 @@
 import logging
-import random
 import socket
 from contextlib import suppress
 
@@ -11,6 +10,12 @@ from docker.models.networks import Network as DockerNetwork
 
 from src.config.options import ConnectionOptions, RunOptions
 from src.config.components import ComponentConfig
+
+
+from src.model.components.drivers import get_driver
+
+from src.model.utils import suffix_generator
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +40,13 @@ class Component:
         self.type = config.type
         self.image = self._build()
         self.instances: list[Container] = []
+        self.driver = config.driver
 
     def _build(self) -> Image:
+        logger.info("building component image", self.name)
         image, _logs = client.images.build(path=self.path)
+        logger.info("building image dome", self.name)
+
         return image
 
 
@@ -51,10 +60,11 @@ class Peer:
         self,
         component: Component,
         network: DockerNetwork,
-        # network_options: NetworkOptions,
-        # run_options: RunOptions,
         network_options: ConnectionOptions,
         run_options: RunOptions,
+        # driver: Driver = None,
+        settings: dict = None,
+        name:str = None,
         **kwargs
     ):
         self.network = network
@@ -67,11 +77,14 @@ class Peer:
         self.container = client.containers.create(
             image=self.component.image.id,
             network=self.network.name,
+            name=name,
             networking_config=networking_config,
             **run_options.to_kwargs(),
             **kwargs
         )
-
+        self.driver = get_driver(component.driver) if component.driver else None
+        print(settings)
+        self.configure(settings)
 
     def start(self) -> None:
         try:
@@ -84,6 +97,15 @@ class Peer:
             logger.error("Failed to start container %s: %s", self.container.short_id, e)
             raise
 
+    def configure(self, settings: dict = None):
+        if self.driver is None:
+            logger.info("No driver configured for container %s, skipping configure.", self.container.short_id)
+            return
+        self.driver.configure(self, **(settings or {}))
+
+
+
+    
     def destroy(self) -> None:
 
         errors: list[Exception] = []
@@ -129,9 +151,10 @@ class ConnectablePeer(Peer):
         run_options: RunOptions,
         # network_options: dict | None = None,
         # run_options: dict | None = None,
-        host_port: int | None = None,   
+        host_port: int | None = None,  
+        **kwargs 
     ):
-        network_suffix = random.randint(1000, 9999)
+        network_suffix = suffix_generator() # random.randint(1000, 9999)
         self.external_network: DockerNetwork = client.networks.create(
             f"external_network_{network_suffix}", driver="bridge"
         )
@@ -143,10 +166,13 @@ class ConnectablePeer(Peer):
         super().__init__(
             component,
             self.external_network,
-            network_options=None,   
+            network_options=None,
             run_options=run_options,
-            **additional_options
+            **{**additional_options, **kwargs} 
         )
+
+
+
         network.connect(
             self.container,
             **(network_options.to_kwargs() if network_options else {})

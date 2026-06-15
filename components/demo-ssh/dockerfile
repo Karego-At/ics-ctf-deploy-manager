@@ -1,0 +1,63 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    nmap \
+    tcpdump \
+    tshark \
+    python3 \
+    python3-pip \
+    python3-venv \
+    iproute2 \
+    iputils-ping \
+    netcat-openbsd \
+    jq \
+    tmux \
+    sudo 
+#    && rm -rf /var/lib/apt/lists/*
+
+
+
+COPY ./ /ws
+
+COPY ./scripts /scripts
+ 
+# WORKDIR /scripts
+
+# RUN python3 -m venv venv && \
+#     venv/bin/pip install --upgrade pip && \
+#     venv/bin/pip install -r ./requirements.txt
+
+
+
+RUN pip install -r /ws/requirements.txt
+
+
+WORKDIR /
+
+RUN apt-get update && apt-get install -y \
+    net-tools \
+    dsniff \
+    iptables
+
+
+
+
+RUN chmod +x ./ws/ssh-setup.sh
+ENTRYPOINT ["./ws/ssh-setup.sh"]
+
+# RUN pip3 install profinet
+
+# RUN mkdir /var/run/sshd && \
+#    useradd -m -s /bin/bash ctf && \
+#    echo "ctf:yourpassword" | chpasswd
+
+# RUN sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \
+#    sed -i 's/#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+# EXPOSE 22
+
+# CMD ["/usr/sbin/sshd", "-D"]

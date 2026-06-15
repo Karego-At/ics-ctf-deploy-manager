@@ -1,0 +1,36 @@
+# output_settings:
+#   unreachable: "Congrats, you hacked plc, flag for next level CT-12345"
+#   default: "Incorrect Data"
+#   mappings:
+#     - input: "HelloWorld"
+#       output: "Hello World Dear Reader"
+#     - input: CFAB123489
+#       output: "Correct"
+#     - input: "STOP"
+#       output: "Emergency stop acknowledged"
+#     - input: "RUN"
+#       output: "Process running normally"
+
+# connection_settings:
+#   ip: "192.168.1.55"
+#   tcp_port: 102
+#   rack: 0
+#   slot: 1
+#   POLL_INTERVAL: 1.0  
+
+
+
+
+output_settings:
+  unreachable: "Congrats, you hacked plc!"
+  default: "Looks like sensor is offline... Congrats, here is your flag: CF-Red_Team_Flag!"
+  mappings:
+  - input: CF-4EDF1A6
+    output: "Sensor online!"
+
+connection_settings:
+  ip: "192.168.1.55"
+  tcp_port: 102
+  rack: 0
+  slot: 1
+  poll_interval: 1.0  

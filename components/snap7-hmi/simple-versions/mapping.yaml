@@ -1,0 +1,27 @@
+# HMI Output Mapping Configuration
+# Maps raw PLC input bytes (decoded as ASCII) to display messages.
+#
+# Rules are checked in order — first match wins.
+# `input` is matched against the ASCII string read from the PLC (stripped of nulls/padding).
+# `output` is what will be shown in the HMI.
+#
+# Special keys:
+#   default:     shown when input doesn't match any rule
+#   unreachable: shown when PLC cannot be reached
+
+unreachable: "Congrats, you hacked plc, flag for next level CT-12345"
+
+default: "Incorrect Data"
+
+mappings:
+  - input: "HelloWorld"
+    output: "Hello World Dear Reader"
+
+  - input: "CFAB123489"
+    output: "Correct"
+
+  - input: "STOP"
+    output: "Emergency stop acknowledged"
+
+  - input: "RUN"
+    output: "Process running normally"

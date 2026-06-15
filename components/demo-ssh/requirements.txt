@@ -1,0 +1,15 @@
+annotated-types==0.7.0
+importlib_metadata==9.0.0
+packaging==26.2
+pnio_dcp==1.2.0
+psutil==7.2.2
+pydantic==2.13.4
+pydantic_core==2.46.4
+python-nmap==0.7.1
+PyYAML==6.0.3
+setuptools==82.0.1
+setuptools-scm==10.0.5
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+vcs-versioning==1.1.1
+zipp==4.1.0

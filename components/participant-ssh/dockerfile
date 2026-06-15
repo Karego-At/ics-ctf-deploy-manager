@@ -10,10 +10,14 @@ RUN apt-get update && apt-get install -y \
     tshark \
     python3 \
     python3-pip \
-    python3-scapy \
+    python3-venv \
     iproute2 \
     iputils-ping \
-    netcat-openbsd 
+    netcat-openbsd \
+    dsniff \
+    jq \
+    tmux \
+    sudo 
 #    && rm -rf /var/lib/apt/lists/*
 
 
@@ -23,15 +27,12 @@ COPY ./ /ws
 RUN chmod +x ./ws/ssh-setup.sh
 ENTRYPOINT ["./ws/ssh-setup.sh"]
 
-# Опциональные Profinet-инструменты
-# RUN pip3 install profinet  # или другие библиотеки по задаче
+# RUN pip3 install profinet
 
-# Настройка SSH
 # RUN mkdir /var/run/sshd && \
 #    useradd -m -s /bin/bash ctf && \
 #    echo "ctf:yourpassword" | chpasswd
 
-# Безопасность: запрещаем root-логин
 # RUN sed -i 's/#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \
 #    sed -i 's/#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
 

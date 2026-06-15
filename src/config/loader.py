@@ -9,7 +9,7 @@ import yaml
 from string import Template
 
 from src.config.devices import AnyDevice
-from src.config.components import AnyComponent, _DRIVER_REGISTRY
+from src.config.components import AnyComponent#, _DRIVER_REGISTRY
 from src.config.options import RunOptions, ConnectionOptions
 from typing import Any, Literal, Annotated, Union, Type, ClassVar
 
@@ -38,7 +38,7 @@ class PeerConfig(BaseModel):
     component: str        
     connection_options: ConnectionOptions = Field(default_factory=ConnectionOptions)
     run_options: RunOptions = Field(default_factory=RunOptions)
-    # settings: Any = None 
+    settings: Any = None 
     args: dict | None = None
     # @field_validator("component", mode="after")
     # @classmethod

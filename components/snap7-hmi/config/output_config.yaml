@@ -1,0 +1,5 @@
+unreachable: "PLC UNREAHABLE CONFIG TEMPLATE!"
+default: "DEFAULE VALUE"
+mappings:
+- input: CF-4EDF1A6
+  output: "Sensor online DEFAULT VALUE!"
