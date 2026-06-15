@@ -1,5 +1,4 @@
 import logging
-import random
 import socket
 from contextlib import suppress
 
@@ -14,6 +13,9 @@ from src.config.components import ComponentConfig
 
 
 from src.model.components.drivers import get_driver
+
+from src.model.utils import suffix_generator
+
 
 logger = logging.getLogger(__name__)
 
@@ -152,7 +154,7 @@ class ConnectablePeer(Peer):
         host_port: int | None = None,  
         **kwargs 
     ):
-        network_suffix = random.randint(1000, 9999)
+        network_suffix = suffix_generator() # random.randint(1000, 9999)
         self.external_network: DockerNetwork = client.networks.create(
             f"external_network_{network_suffix}", driver="bridge"
         )
